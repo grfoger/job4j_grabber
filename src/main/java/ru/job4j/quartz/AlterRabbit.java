@@ -4,6 +4,8 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -14,8 +16,11 @@ import static org.quartz.SimpleScheduleBuilder.*;
 
 public class AlterRabbit {
 
-    private int z = 1; ////тестовый класс
+    private Connection connect;
+
     public static void main(String[] args) {
+        AlterRabbit ar = new AlterRabbit();
+        ar.init();
         try {
             List<Long> store = new ArrayList<>();
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -41,6 +46,19 @@ public class AlterRabbit {
         }
     }
 
+    public void init() {
+        try {
+            Class.forName(takeSettings().getProperty("driver-class-name"));
+            connect = DriverManager.getConnection(
+                    takeSettings().getProperty("url"),
+                    takeSettings().getProperty("username"),
+                    takeSettings().getProperty("password")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private static Properties takeSettings() {
         Properties config = null;
         try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
@@ -63,7 +81,7 @@ public class AlterRabbit {
     public static class Rabbit implements Job {
 
         public Rabbit() {
-            System.out.println(new AlterRabbit().z);
+            System.out.println("");
         }
 
         @Override
