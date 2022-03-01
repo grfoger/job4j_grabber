@@ -41,13 +41,11 @@ public class AlertRabbit {
     }
 
     private int takeSeconds() {
-        int value = 0;
         try {
-            value = Integer.parseInt(takeSettings().get("rabbit.interval").toString());
+            return Integer.parseInt(takeSettings().get("rabbit.interval").toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("Wrong argument. Check properties settings.");
+            throw new IllegalArgumentException("Wrong argument. Check properties settings.");
         }
-        return value;
     }
 
     public static class Rabbit implements Job {
