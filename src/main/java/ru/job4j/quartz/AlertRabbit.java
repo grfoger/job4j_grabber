@@ -14,6 +14,8 @@ import static org.quartz.SimpleScheduleBuilder.*;
 
 public class AlertRabbit {
 
+    static Properties config;
+
     public static void main(String[] args) {
 
         try {
@@ -27,7 +29,9 @@ public class AlertRabbit {
                     .usingJobData(data)
                     .build();
                 SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(takeSeconds())
+                    .withIntervalInSeconds(
+                            Integer.parseInt(
+                                    config.getProperty("rabbit.interval")))
                     .repeatForever();
                 Trigger trigger = newTrigger()
                     .startNow()
@@ -47,11 +51,11 @@ public class AlertRabbit {
         Connection connect = null;
         try {
             takeSettings();
-            Class.forName(takeSettings().getProperty("driver-class-name"));
+            Class.forName(config.getProperty("driver-class-name"));
             connect = DriverManager.getConnection(
-                    takeSettings().getProperty("url"),
-                    takeSettings().getProperty("username"),
-                    takeSettings().getProperty("password")
+                    config.getProperty("url"),
+                    config.getProperty("username"),
+                    config.getProperty("password")
             );
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,22 +63,13 @@ public class AlertRabbit {
         return connect;
     }
 
-    private static Properties takeSettings() {
-        Properties config = null;
+    private static void takeSettings() {
         try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
             config = new Properties();
             config.load(in);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return config;
-    }
-
-    private static int takeSeconds() {
-        if (takeSettings().getProperty("rabbit.interval") == null) {
-            throw new IllegalArgumentException("Exception: argument is null!");
-        }
-        return Integer.parseInt(takeSettings().getProperty("rabbit.interval"));
     }
 
     public static class Rabbit implements Job {
