@@ -5,7 +5,8 @@ import java.util.Map;
 
 public class SqlRuDateTimeParser implements DateTimeParser {
 
-    LocalDateTime now = LocalDateTime.now();
+    public static final String TODAY = "сегодня";
+    public static final String YESTERDAY = "вчера";
 
     private static final Map<String, Integer> MONTHS = Map.ofEntries(
             Map.entry("янв", 1),
@@ -24,6 +25,7 @@ public class SqlRuDateTimeParser implements DateTimeParser {
 
     @Override
     public LocalDateTime parse(String parse) {
+        LocalDateTime now = LocalDateTime.now();
         String[] dateTime = parse.split(", ");
         String[] date = dateTime[0].split(" ");
         String[] time = dateTime[1].split(":");
@@ -37,15 +39,15 @@ public class SqlRuDateTimeParser implements DateTimeParser {
             year = 2000 + Integer.parseInt(date[2]);
             month = MONTHS.get(date[1]);
         } else {
-            if ("сегодня".equals(date[0])) {
-                day = now.getDayOfMonth();
-                year = now.getYear();
-                month = now.getMonthValue();
-            } else if ("вчера".equals(date[0])) {
-                day = now.minusDays(1).getDayOfMonth();
-                year = now.minusDays(1).getYear();
-                month = now.minusDays(1).getMonthValue();
+            LocalDateTime value = LocalDateTime.MIN;
+            if (TODAY.equals(date[0])) {
+                value = now;
+            } else if (YESTERDAY.equals(date[0])) {
+                value = now.minusDays(1);
             }
+            day = value.getDayOfMonth();
+            year = value.getYear();
+            month = value.getMonthValue();
         }
         return LocalDateTime.of(year, month, day, hours, minutes);
     }
