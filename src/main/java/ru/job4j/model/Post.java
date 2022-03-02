@@ -21,25 +21,35 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", link='" + link + '\'' +
-                ", description='" + description + '\'' +
-                ", created=" + created +
-                '}';
+        return "Post{"
+                + "id=" + id
+                + ", title='" + title + '\''
+                + ", link='" + link + '\''
+                + ", description='" + description + '\''
+                + ", created=" + created
+                + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Post post = (Post) o;
 
-        if (title != null ? !title.equals(post.title) : post.title != null) return false;
-        if (link != null ? !link.equals(post.link) : post.link != null) return false;
-        if (description != null ? !description.equals(post.description) : post.description != null) return false;
+        if (title != null ? !title.equals(post.title) : post.title != null) {
+            return false;
+        }
+        if (link != null ? !link.equals(post.link) : post.link != null) {
+            return false;
+        }
+        if (description != null ? !description.equals(post.description) : post.description != null) {
+            return false;
+        }
         return created != null ? created.equals(post.created) : post.created == null;
     }
 
