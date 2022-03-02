@@ -18,24 +18,25 @@ public class AlertRabbit {
 
         try {
             AlertRabbit ar = new AlertRabbit();
-            Connection connect = ar.init();
-            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-            scheduler.start();
-            JobDataMap data = new JobDataMap();
-            data.put("connect", connect);
-            JobDetail job = newJob(Rabbit.class)
+            try (Connection connect = ar.init()) {
+                Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+                scheduler.start();
+                JobDataMap data = new JobDataMap();
+                data.put("connect", connect);
+                JobDetail job = newJob(Rabbit.class)
                     .usingJobData(data)
                     .build();
-            SimpleScheduleBuilder times = simpleSchedule()
+                SimpleScheduleBuilder times = simpleSchedule()
                     .withIntervalInSeconds(takeSeconds())
                     .repeatForever();
-            Trigger trigger = newTrigger()
+                Trigger trigger = newTrigger()
                     .startNow()
                     .withSchedule(times)
                     .build();
-            scheduler.scheduleJob(job, trigger);
-            Thread.sleep(10000);
-            scheduler.shutdown();
+                scheduler.scheduleJob(job, trigger);
+                Thread.sleep(10000);
+                scheduler.shutdown();
+            }
         } catch (Exception se) {
             se.printStackTrace();
         }
