@@ -38,16 +38,15 @@ public class SqlRuDateTimeParser implements DateTimeParser {
             day = Integer.parseInt(date[0]);
             year = 2000 + Integer.parseInt(date[2]);
             month = MONTHS.get(date[1]);
-        } else {
-            LocalDateTime value = LocalDateTime.MIN;
-            if (TODAY.equals(date[0])) {
-                value = now;
-            } else if (YESTERDAY.equals(date[0])) {
-                value = now.minusDays(1);
-            }
-            day = value.getDayOfMonth();
-            year = value.getYear();
-            month = value.getMonthValue();
+        } else if (TODAY.equals(date[0])) {
+            day = now.getDayOfMonth();
+            year = now.getYear();
+            month = now.getMonthValue();
+        } else if (YESTERDAY.equals(date[0])) {
+            LocalDateTime yesterday = now.minusDays(1);
+            day = yesterday.getDayOfMonth();
+            year = yesterday.getYear();
+            month = yesterday.getMonthValue();
         }
         return LocalDateTime.of(year, month, day, hours, minutes);
     }
