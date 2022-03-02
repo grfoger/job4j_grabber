@@ -72,7 +72,7 @@ public class AlertRabbit {
 
     private static int takeSeconds() {
         if (takeSettings().getProperty("rabbit.interval") == null) {
-            throw new NullPointerException("Exception: argument is null!");
+            throw new IllegalArgumentException("Exception: argument is null!");
         }
         return Integer.parseInt(takeSettings().getProperty("rabbit.interval"));
     }
