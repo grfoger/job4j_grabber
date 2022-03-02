@@ -37,6 +37,7 @@ public class AlertRabbit {
                 Thread.sleep(10000);
                 scheduler.shutdown();
             }
+
         } catch (Exception se) {
             se.printStackTrace();
         }
