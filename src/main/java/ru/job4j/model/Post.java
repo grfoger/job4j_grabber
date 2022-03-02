@@ -80,12 +80,18 @@ public class Post {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Post post = (Post) o;
 
-        if (id != post.id) return false;
+        if (id != post.id) {
+            return false;
+        }
         return link != null ? link.equals(post.link) : post.link == null;
     }
 
