@@ -3,11 +3,11 @@ package ru.job4j.model;
 import java.time.LocalDateTime;
 
 public class Post {
-    int id;
-    String title;
-    String link;
-    String description;
-    LocalDateTime created;
+    private int id;
+    private String title;
+    private String link;
+    private String description;
+    private LocalDateTime created;
 
     public Post() {
     }
@@ -16,6 +16,54 @@ public class Post {
         this.title = title;
         this.link = link;
         this.description = description;
+        this.created = created;
+    }
+
+    public Post(int id, String title, String link, String description, LocalDateTime created) {
+        this.id = id;
+        this.title = title;
+        this.link = link;
+        this.description = description;
+        this.created = created;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
@@ -32,33 +80,19 @@ public class Post {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Post post = (Post) o;
 
-        if (title != null ? !title.equals(post.title) : post.title != null) {
-            return false;
-        }
-        if (link != null ? !link.equals(post.link) : post.link != null) {
-            return false;
-        }
-        if (description != null ? !description.equals(post.description) : post.description != null) {
-            return false;
-        }
-        return created != null ? created.equals(post.created) : post.created == null;
+        if (id != post.id) return false;
+        return link != null ? link.equals(post.link) : post.link == null;
     }
 
     @Override
     public int hashCode() {
-        int result = title != null ? title.hashCode() : 0;
+        int result = id;
         result = 31 * result + (link != null ? link.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (created != null ? created.hashCode() : 0);
         return result;
     }
 }
