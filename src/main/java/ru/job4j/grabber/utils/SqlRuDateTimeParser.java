@@ -1,6 +1,8 @@
 package ru.job4j.grabber.utils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 
 public class SqlRuDateTimeParser implements DateTimeParser {
@@ -25,30 +27,23 @@ public class SqlRuDateTimeParser implements DateTimeParser {
 
     @Override
     public LocalDateTime parse(String parse) {
-        LocalDateTime now = LocalDateTime.now();
+
         String[] dateTime = parse.split(", ");
         String[] date = dateTime[0].split(" ");
         String[] time = dateTime[1].split(":");
-        int hours = Integer.parseInt(time[0]);
-        int minutes = Integer.parseInt(time[1]);
-        int month = 0;
-        int day = 0;
-        int year = 0;
+        LocalTime currentTime = LocalTime.of(Integer.parseInt(time[0]), Integer.parseInt(time[1]));
+        LocalDate currentDate = LocalDate.MIN;
         if (date.length != 1) {
-            day = Integer.parseInt(date[0]);
-            year = 2000 + Integer.parseInt(date[2]);
-            month = MONTHS.get(date[1]);
+            currentDate = LocalDate.of(
+                    2000 + Integer.parseInt(date[2]),
+                    MONTHS.get(date[1]),
+                    Integer.parseInt(date[0]));
         } else if (TODAY.equals(date[0])) {
-            day = now.getDayOfMonth();
-            year = now.getYear();
-            month = now.getMonthValue();
+            currentDate = LocalDate.now();
         } else if (YESTERDAY.equals(date[0])) {
-            LocalDateTime yesterday = now.minusDays(1);
-            day = yesterday.getDayOfMonth();
-            year = yesterday.getYear();
-            month = yesterday.getMonthValue();
+            currentDate = LocalDate.now().minusDays(1);
         }
-        return LocalDateTime.of(year, month, day, hours, minutes);
+        return LocalDateTime.of(currentDate, currentTime);
     }
 
 }
