@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class SqlRuDateTimeParser implements DateTimeParser {
 
-    public static final String TODAY = "сегодня";
-    public static final String YESTERDAY = "вчера";
+    private static final String TODAY = "сегодня";
+    private static final String YESTERDAY = "вчера";
 
     private static final Map<String, Integer> MONTHS = Map.ofEntries(
             Map.entry("янв", 1),
