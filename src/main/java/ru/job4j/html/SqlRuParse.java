@@ -36,10 +36,10 @@ public class SqlRuParse {
         Element body = doc.selectFirst(".msgTable").child(0);
         Element title = body.child(0);
         Element description = body.child(1).child(1);
-        Element date_create = body.child(2).child(0);
-        String date = date_create.text().split("\\[")[0];
+        Element dateCreate = body.child(2).child(0);
+        String date = dateCreate.text().split("\\[")[0];
         DateTimeParser parser = new SqlRuDateTimeParser();
-        LocalDateTime time = parser.parse(date.substring(0,date.length() - 1));
+        LocalDateTime time = parser.parse(date.substring(0, date.length() - 1));
         return new Post(title.text(), url, description.text(), time);
     }
 }
