@@ -36,10 +36,8 @@ public class SqlRuParse implements Parse {
             Elements row = doc.select(".postslisttopic");
             for (Element td : row) {
                 Post post = detail(td.child(0).attr("href"));
-                boolean containsJava = post.getTitle().toLowerCase().contains("java");
-                boolean containsJS = post.getTitle().toLowerCase().contains("javascript");
-                boolean isOnlyJava = containsJava && !containsJS;
-                if (!isOnlyJava) {
+                String titleSearch = post.getTitle().toLowerCase();
+                if (!titleSearch.contains("java") || titleSearch.contains("javascript")) {
                     continue;
                 }
                 posts.add(post);
