@@ -29,13 +29,13 @@ public class PsqlStore implements Store, AutoCloseable {
     }
 
     public static void main(String[] args) {
-        try (InputStream in = PsqlStore.class.getClassLoader().getResourceAsStream("schema.properties")) {
+        try (InputStream in = PsqlStore.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties cfg = new Properties();
             cfg.load(in);
             try (PsqlStore psqlStore = new PsqlStore(cfg)) {
                 Parse parser = new SqlRuParse(new SqlRuDateTimeParser());
                 String url = "https://www.sql.ru/forum/job-offers/";
-                int pages  = 5;
+                int pages  = 1;
                 for (int i = 1; i <= pages; i++) {
                     parser.list(url + i).forEach(x -> psqlStore.save(x));
                 }
