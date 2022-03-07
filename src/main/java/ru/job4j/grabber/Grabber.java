@@ -6,6 +6,7 @@ import ru.job4j.grabber.utils.SqlRuDateTimeParser;
 import ru.job4j.html.SqlRuParse;
 
 import java.io.*;
+import java.util.List;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.newJob;
@@ -16,7 +17,7 @@ public class Grabber implements Grab {
     private final Properties cfg = new Properties();
 
     public Store store() {
-        return null;
+        return new PsqlStore(cfg);
     }
 
     public Scheduler scheduler() throws SchedulerException {
@@ -56,7 +57,12 @@ public class Grabber implements Grab {
             JobDataMap map = context.getJobDetail().getJobDataMap();
             Store store = (Store) map.get("store");
             Parse parse = (Parse) map.get("parse");
-            /* TODO impl logic */
+            try {
+                List<Post> postsSql = parse.list("https://www.sql.ru/forum/job-offers/");
+                postsSql.forEach(store::save);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -66,6 +72,7 @@ public class Grabber implements Grab {
         grab.cfg();
         Scheduler scheduler = grab.scheduler();
         Store store = grab.store();
-        grab.init(new SqlRuParse(new SqlRuDateTimeParser()), store, scheduler);
+        Parse parser = new SqlRuParse(new SqlRuDateTimeParser());
+        grab.init(parser, store, scheduler);
     }
 }
